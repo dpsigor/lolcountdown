@@ -1,5 +1,4 @@
 #!/bin/sh
-# printf "$(python3 /home/dpsigor/.local/lib/python3.8/site-packages/termdown.py $1)" | lolcat
 
 [ ! -n "$1" -o ! -n "$2" -o ! -n "$3" ] && echo "Format: hh mm ss" && exit 1
 if [ "$1" -gt "-1" ] 2>/dev/null; then
