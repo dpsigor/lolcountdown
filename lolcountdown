@@ -2,24 +2,24 @@
 # printf "$(python3 /home/dpsigor/.local/lib/python3.8/site-packages/termdown.py $1)" | lolcat
 
 [ ! -n "$1" -o ! -n "$2" -o ! -n "$3" ] && echo "Format: hh mm ss" && exit 1
-if [ "$1" -gt 0 ] 2>/dev/null; then
+if [ "$1" -gt "-1" ] 2>/dev/null; then
   echo "ok"
 else
-  echo "hh must be a positive integer, recieved $1"
+  echo "hh must be a non-negative integer, recieved $1"
   exit 1
 fi
 
-if [ "$2" -gt 0 ] 2>/dev/null; then
+if [ "$2" -ge "0" ] 2>/dev/null; then
   echo "ok"
 else
-  echo "mm must be a positive integer, recieved $2"
+  echo "mm must be a non-negative integer, recieved $2"
   exit 1
 fi
 
-if [ "$3" -gt 0 ] 2>/dev/null; then
+if [ "$3" -ge 0 ] 2>/dev/null; then
   echo "ok"
 else
-  echo "ss must be a positive integer, recieved $3"
+  echo "ss must be a non-negative integer, recieved $3"
   exit 1
 fi
 
@@ -37,14 +37,13 @@ else
   exit 1
 fi
 
-set -- $*
-secs=$(( ${1#0} * 3600 + ${2#0} * 60 + ${3#0} ))
+secs=$(( ${1} * 3600 + ${2} * 60 + ${3} ))
 termwidth="$(tput cols)"
 while [ $secs -gt 0 ]
 do
   sleep 1 &
   txt="$(printf "\r%02d:%02d:%02d" $((secs/3600)) $(( (secs/60)%60)) $((secs%60)))"
-  art="$(figlet -w $termwidth -c "$txt")"
+  art="$(figlet -w $termwidth -f big -c "$txt")"
   printf "\033c"
   printf "$art" | lolcat
   secs=$(( $secs - 1 ))
